@@ -16,11 +16,11 @@ import android.content.ServiceConnection;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
 public class MainActivity extends Activity {
+	private int numberOfTimers = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +70,41 @@ public class MainActivity extends Activity {
 			parcel.seconds = seconds;
 
 			Bundle bundle = new Bundle();
-			bundle.putParcelable("myParcel", (Parcelable) parcel);
+			bundle.putParcelable("startTimeParcel", (Parcelable) parcel);
 			message.setData(bundle);
 
 			try {
 				Log.d("MainActivity", "StartEggTimer message sent");
 				messenger.send(message);
+				numberOfTimers++;
 			}
 			catch (RemoteException e) {
 				Log.d("MainActivity", "StartEggTimer RemoteException");
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public void stopEggTimer(View v) {
+		if (numberOfTimers != 0) {
+			Message message = Message.obtain(null, TimerService.STOP_EGGTIMER, 0, 0);
+
+			MyParcelable parcel = new MyParcelable();
+			parcel.eggTimerName = "tai";
+			parcel.seconds = 0;
+
+			Bundle bundle = new Bundle();
+			bundle.putParcelable("stopTimerParcel", (Parcelable) parcel);
+			message.setData(bundle);
+
+			try {
+				Log.d("MainActivity", "StopEggTimer message sent");
+				messenger.send(message);
+				numberOfTimers--;
+			}
+			catch (RemoteException e) {
+				Log.d("MainActivity", "StopEggTimer RemoteException");
 				e.printStackTrace();
 			}
 		}
@@ -95,7 +121,6 @@ public class MainActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
-
 					}
 				});
 		AlertDialog alertDialog = alertDialogBuilder.create();
@@ -134,5 +159,4 @@ public class MainActivity extends Activity {
 		}
 
 	};
-
 }
