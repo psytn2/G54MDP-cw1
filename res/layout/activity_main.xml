@@ -91,8 +91,7 @@
         android:layout_below="@+id/startTimerButton"
         android:layout_marginTop="44dp"
         android:ems="10" >
-
-        <requestFocus />
     </EditText>
+
 
 </RelativeLayout>

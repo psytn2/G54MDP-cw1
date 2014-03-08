@@ -1,5 +1,7 @@
 package com.example.g54mdp_eggtimer;
 
+import java.util.HashMap;
+
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -8,10 +10,12 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +25,8 @@ import android.widget.NumberPicker;
 
 public class MainActivity extends Activity {
 	private int numberOfTimers = 0;
+
+	MyReceiver myReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,21 @@ public class MainActivity extends Activity {
 		});
 
 		this.bindService(new Intent(this, TimerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+	}
+
+	@Override
+	protected void onStart() {
+		myReceiver = new MyReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(TimerService.UPDATE_TIMER_INFO);
+		registerReceiver(myReceiver, intentFilter);
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop() {
+		unregisterReceiver(myReceiver);
+		super.onStop();
 	}
 
 	@Override
@@ -159,4 +180,15 @@ public class MainActivity extends Activity {
 		}
 
 	};
+
+	private class MyReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			EditText test = (EditText) findViewById(R.id.testTextField);
+			test.setText("Timer: " + intent.getStringExtra("TIMER_NAME") + " " + intent.getLongExtra("SECONDS_LEFT", 0)
+					+ " seconds left");
+		}
+
+	}
 }
