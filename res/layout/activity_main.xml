@@ -37,30 +37,9 @@
         android:text="Stop Timer" />
 
     <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/timerNameEditText"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:text="EggTimer" />
-
-    <EditText
-        android:id="@+id/timerNameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/minutesNumberPicker"
-        android:layout_below="@+id/titleText"
-        android:layout_marginTop="17dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="insert name of timer" />
-
-    <TextView
         android:id="@+id/hoursTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/titleText"
         android:layout_below="@+id/timerNameEditText"
         android:layout_marginTop="15dp"
         android:text="Hours"
@@ -84,14 +63,25 @@
         android:text="Start Timer" />
 
     <EditText
-        android:id="@+id/testTextField"
+        android:id="@+id/timerNameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/startTimerButton"
-        android:layout_below="@+id/startTimerButton"
-        android:layout_marginTop="44dp"
-        android:ems="10" >
+        android:layout_alignLeft="@+id/hoursTextView"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:inputType="text"
+        android:text="insert name of timer" >
+
+        <requestFocus />
     </EditText>
 
+    <ListView
+        android:id="@+id/timerListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startTimerButton"
+        android:divider="@color/blue"
+        android:dividerHeight="4px" >
+    </ListView>
 
 </RelativeLayout>

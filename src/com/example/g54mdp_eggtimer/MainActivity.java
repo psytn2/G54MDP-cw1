@@ -1,5 +1,6 @@
 package com.example.g54mdp_eggtimer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.os.Bundle;
@@ -21,10 +22,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 
 public class MainActivity extends Activity {
 	private int numberOfTimers = 0;
+
+	private ListView listView;
+
+	private TimersAdapter timersAdapter;
+
+	private ArrayList<TimerData> timerDataArr;
+
+	private HashMap<String, TimerData> dataHashMap = new HashMap<String, TimerData>();
 
 	MyReceiver myReceiver;
 
@@ -34,6 +44,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setNumberPickersBounds();
+
+		listView = (ListView) findViewById(R.id.timerListView);
+		timerDataArr = new ArrayList<TimerData>();
+		timersAdapter = new TimersAdapter(MainActivity.this, timerDataArr);
+
+		listView.setAdapter(timersAdapter);
 
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
 
@@ -80,7 +96,7 @@ public class MainActivity extends Activity {
 		String name = timerNameET.getText().toString();
 		int seconds = (hoursNP.getValue() * 60 * 60) + (minutesNP.getValue() * 60);
 
-		if (seconds == 0)
+		if (seconds == 0 || dataHashMap.containsKey(name))
 			alertWrongInput();
 
 		else {
@@ -97,7 +113,6 @@ public class MainActivity extends Activity {
 			try {
 				Log.d("MainActivity", "StartEggTimer message sent");
 				messenger.send(message);
-				numberOfTimers++;
 			}
 			catch (RemoteException e) {
 				Log.d("MainActivity", "StartEggTimer RemoteException");
@@ -108,7 +123,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void stopEggTimer(View v) {
-		if (numberOfTimers != 0) {
+		if (dataHashMap.size() != 0) {
 			Message message = Message.obtain(null, TimerService.STOP_EGGTIMER, 0, 0);
 
 			MyParcelable parcel = new MyParcelable();
@@ -122,7 +137,6 @@ public class MainActivity extends Activity {
 			try {
 				Log.d("MainActivity", "StopEggTimer message sent");
 				messenger.send(message);
-				numberOfTimers--;
 			}
 			catch (RemoteException e) {
 				Log.d("MainActivity", "StopEggTimer RemoteException");
@@ -136,7 +150,7 @@ public class MainActivity extends Activity {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Wrong input");
 
-		alertDialogBuilder.setMessage("The time inserted is invalid").setCancelable(false)
+		alertDialogBuilder.setMessage("The time or name inserted is invalid").setCancelable(false)
 				.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
 
 					@Override
@@ -185,10 +199,37 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			EditText test = (EditText) findViewById(R.id.testTextField);
-			test.setText("Timer: " + intent.getStringExtra("TIMER_NAME") + " " + intent.getLongExtra("SECONDS_LEFT", 0)
-					+ " seconds left");
+			// EditText test = (EditText) findViewById(R.id.testTextField);
+			// test.setText("Timer: " + intent.getStringExtra("TIMER_NAME") + " " + intent.getLongExtra("SECONDS_LEFT",
+			// 0)
+			// + " seconds left");
+			String timerName = intent.getStringExtra("TIMER_NAME");
+			Long timeLeft = intent.getLongExtra("SECONDS_LEFT", 0);
+			TimerData temptd = new TimerData(timerName, timeLeft);
+			int index = findIndex(timerName);
+
+			if (index == -1) {
+				timerDataArr.add(temptd);
+			}
+			else {
+				timerDataArr.get(index).setSeconds(timeLeft);
+			}
+			timersAdapter.updateData(timerDataArr);
+			System.out.println(timerDataArr.size() + timerName);
+			dataHashMap.put(timerName, temptd);
+
+			Log.d("MainActivity", dataHashMap.size() + " MyReceiver " + timerName + " " + timeLeft);
 		}
 
+		public int findIndex(String timerName) {
+			int index = -1;
+			for (int i = 0; i < timerDataArr.size(); i++) {
+				if (timerDataArr.get(i).getName().equals(timerName)) {
+					index = i;
+				}
+			}
+			return index;
+
+		}
 	}
 }
