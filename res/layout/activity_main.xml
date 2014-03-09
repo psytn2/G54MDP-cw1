@@ -8,37 +8,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="EggTimer" />
-
-    <NumberPicker
-        android:id="@+id/hoursNumberPicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/hoursTextView"
-        android:layout_below="@+id/hoursTextView"
-        android:layout_marginTop="27dp" />
-
     <NumberPicker
         android:id="@+id/minutesNumberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/minutesTextView"
-        android:layout_alignTop="@+id/hoursNumberPicker" />
-
-    <TextView
-        android:id="@+id/hoursTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/titleText"
-        android:layout_below="@+id/titleText"
-        android:layout_marginLeft="19dp"
-        android:layout_marginTop="78dp"
-        android:text="Hours"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_below="@+id/hoursTextView" />
 
     <TextView
         android:id="@+id/minutesTextView"
@@ -46,31 +21,67 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/hoursTextView"
         android:layout_alignBottom="@+id/hoursTextView"
-        android:layout_marginLeft="28dp"
-        android:layout_toRightOf="@+id/hoursNumberPicker"
+        android:layout_centerHorizontal="true"
         android:text="Minutes"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText
-        android:id="@+id/timerNameEditText"
+    <Button
+        android:id="@+id/stopTimerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/minutesTextView"
-        android:layout_alignLeft="@+id/hoursTextView"
-        android:layout_marginBottom="19dp"
-        android:ems="10"
-        android:text="insert name of timer" >
+        android:layout_alignBaseline="@+id/startTimerButton"
+        android:layout_alignBottom="@+id/startTimerButton"
+        android:layout_alignLeft="@+id/minutesNumberPicker"
+        android:layout_marginLeft="28dp"
+        android:onClick="stopEggTimer"
+        android:text="Stop Timer" />
 
-        <requestFocus />
-    </EditText>
+    <TextView
+        android:id="@+id/hoursTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timerNameEditText"
+        android:layout_marginTop="15dp"
+        android:text="Hours"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <NumberPicker
+        android:id="@+id/hoursNumberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hoursTextView"
+        android:layout_alignTop="@+id/minutesNumberPicker" />
 
     <Button
         android:id="@+id/startTimerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/timerNameEditText"
         android:layout_below="@+id/hoursNumberPicker"
-        android:layout_marginTop="32dp"
-        android:layout_toRightOf="@+id/titleText"
+        android:layout_marginTop="17dp"
+        android:onClick="startEggTimer"
         android:text="Start Timer" />
+
+    <EditText
+        android:id="@+id/timerNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hoursTextView"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:inputType="text"
+        android:text="insert name of timer" >
+
+        <requestFocus />
+    </EditText>
+
+    <ListView
+        android:id="@+id/timerListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startTimerButton"
+        android:divider="@color/blue"
+        android:dividerHeight="4px" >
+    </ListView>
 
 </RelativeLayout>
