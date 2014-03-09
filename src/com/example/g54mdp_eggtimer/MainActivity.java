@@ -26,7 +26,6 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 
 public class MainActivity extends Activity {
-	private int numberOfTimers = 0;
 
 	private ListView listView;
 
@@ -92,11 +91,12 @@ public class MainActivity extends Activity {
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
 		NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
 		NumberPicker minutesNP = (NumberPicker) findViewById(R.id.minutesNumberPicker);
+		NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
 
 		String name = timerNameET.getText().toString();
-		int seconds = (hoursNP.getValue() * 60 * 60) + (minutesNP.getValue() * 60);
+		int seconds = (hoursNP.getValue() * 60 * 60) + (minutesNP.getValue() * 60) + secondsNP.getValue();
 
-		if (seconds == 0 || dataHashMap.containsKey(name))
+		if (seconds == 0 || dataHashMap.containsKey(name) || name.equals(""))
 			alertWrongInput();
 
 		else {
@@ -118,8 +118,20 @@ public class MainActivity extends Activity {
 				Log.d("MainActivity", "StartEggTimer RemoteException");
 				e.printStackTrace();
 			}
+			resetInputValues();
 		}
 
+	}
+
+	private void resetInputValues() {
+		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
+		final NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
+		final NumberPicker minutesNP = (NumberPicker) findViewById(R.id.minutesNumberPicker);
+		final NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
+		timerNameET.setText("");
+		hoursNP.setValue(0);
+		minutesNP.setValue(0);
+		secondsNP.setValue(0);
 	}
 
 	public void stopEggTimer(View v) {
@@ -164,7 +176,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void setNumberPickersBounds() {
-		Log.d("MainActivity", "SetNumberPickerBounds MainActivity");
+
 		NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
 		hoursNP.setMaxValue(23);
 		hoursNP.setMinValue(0);
@@ -174,6 +186,12 @@ public class MainActivity extends Activity {
 		minutesNP.setMaxValue(59);
 		minutesNP.setMinValue(0);
 		minutesNP.setWrapSelectorWheel(true);
+
+		NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
+		secondsNP.setMaxValue(59);
+		secondsNP.setMinValue(0);
+		secondsNP.setWrapSelectorWheel(true);
+		Log.d("MainActivity", "SetNumberPickerBounds MainActivity");
 	}
 
 	private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -199,10 +217,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// EditText test = (EditText) findViewById(R.id.testTextField);
-			// test.setText("Timer: " + intent.getStringExtra("TIMER_NAME") + " " + intent.getLongExtra("SECONDS_LEFT",
-			// 0)
-			// + " seconds left");
+
 			String timerName = intent.getStringExtra("TIMER_NAME");
 			Long timeLeft = intent.getLongExtra("SECONDS_LEFT", 0);
 			TimerData temptd = new TimerData(timerName, timeLeft);
@@ -215,7 +230,6 @@ public class MainActivity extends Activity {
 				timerDataArr.get(index).setSeconds(timeLeft);
 			}
 			timersAdapter.updateData(timerDataArr);
-			System.out.println(timerDataArr.size() + timerName);
 			dataHashMap.put(timerName, temptd);
 
 			Log.d("MainActivity", dataHashMap.size() + " MyReceiver " + timerName + " " + timeLeft);
