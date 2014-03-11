@@ -21,8 +21,9 @@
         android:id="@+id/hoursTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/timerListView"
         android:layout_below="@+id/timerNameEditText"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
         android:text="Hours"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -53,15 +54,16 @@
         android:id="@+id/hoursNumberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/hoursTextView"
+        android:layout_alignLeft="@+id/timerListView"
         android:layout_below="@+id/hoursTextView"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="11dp" />
 
     <NumberPicker
         android:id="@+id/minutesNumberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/timerListView"
+        android:layout_below="@+id/minutesTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp" />
 
@@ -71,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/timerListView"
         android:layout_below="@+id/minutesTextView"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="11dp" />
 
     <EditText
@@ -82,15 +85,17 @@
         android:layout_marginTop="21dp"
         android:ems="10"
         android:inputType="text"
+        android:maxLength="22"
+        android:onClick="clearNameEditText"
         android:text="insert name of timer" />
 
     <TextView
         android:id="@+id/secondsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/secondsNumberPicker"
-        android:layout_alignRight="@+id/secondsNumberPicker"
-        android:layout_marginRight="15dp"
+        android:layout_alignBaseline="@+id/minutesTextView"
+        android:layout_alignBottom="@+id/minutesTextView"
+        android:layout_alignLeft="@+id/secondsNumberPicker"
         android:text="Seconds"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

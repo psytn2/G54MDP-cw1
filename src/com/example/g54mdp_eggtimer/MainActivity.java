@@ -61,16 +61,6 @@ public class MainActivity extends Activity {
 
 		setListViewProperties();
 
-		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
-
-		timerNameET.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				timerNameET.setText("");
-			}
-		});
-
 		this.bindService(new Intent(this, TimerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
 	}
 
@@ -129,17 +119,6 @@ public class MainActivity extends Activity {
 
 	}
 
-	private void resetInputValues() {
-		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
-		final NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
-		final NumberPicker minutesNP = (NumberPicker) findViewById(R.id.minutesNumberPicker);
-		final NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
-		timerNameET.setText("");
-		hoursNP.setValue(0);
-		minutesNP.setValue(0);
-		secondsNP.setValue(0);
-	}
-
 	public void stopEggTimer(View v) {
 		if (dataHashMap.size() != 0) {
 			Message message = Message.obtain(null, TimerService.STOP_EGGTIMER, 0, 0);
@@ -162,6 +141,22 @@ public class MainActivity extends Activity {
 			}
 		}
 
+	}
+
+	public void clearNameEditText(View v) {
+		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
+		timerNameET.setText("");
+	}
+
+	private void resetInputValues() {
+		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
+		final NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
+		final NumberPicker minutesNP = (NumberPicker) findViewById(R.id.minutesNumberPicker);
+		final NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
+		timerNameET.setText("");
+		hoursNP.setValue(0);
+		minutesNP.setValue(0);
+		secondsNP.setValue(0);
 	}
 
 	protected void alertWrongInput() {
