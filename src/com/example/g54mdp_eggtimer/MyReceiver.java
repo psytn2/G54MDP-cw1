@@ -2,9 +2,12 @@ package com.example.g54mdp_eggtimer;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.drm.DrmStore.RightsStatus;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -45,14 +48,15 @@ public class MyReceiver extends BroadcastReceiver {
 				}
 			}
 
-			timersAdapter.updateData(timerDataArr);
 		}
+
+		timersAdapter.updateData(timerDataArr);
 
 		Log.d("MyReceiver", "onReceive " + timerName + " " + timeLeft);
 	}
 
 	private void ringAlarm(Context context, String timerName) {
-
+		RingtoneManager ringtoneManager = new RingtoneManager(context);
 		// find the alarm to play, if alarm is not available then try notification and ringtone
 		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 		if (alert == null) {
@@ -64,19 +68,37 @@ public class MyReceiver extends BroadcastReceiver {
 			}
 		}
 
-		Ringtone ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), alert);
+		final Ringtone ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), alert);
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		android.os.Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		final android.os.Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
 		long[] pattern = { 200, 1000, 300, 1000, 200, 1000, 300, 1000 };
 
 		// play the ringtone if not mute or vibrator
 		if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+			ringtoneManager.stopPreviousRingtone();
 			ringtone.play();
 		}
 
 		// vibrate on alarm
 		vibrator.vibrate(pattern, 1);
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		alertDialogBuilder.setTitle("Timer: " + timerName + " finished");
+
+		alertDialogBuilder.setMessage("Stop alarm").setCancelable(false)
+				.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						vibrator.cancel();
+						ringtone.stop();
+						dialog.cancel();
+					}
+				});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		alertDialog.show();
 	}
 
 	public int findIndex(String timerName) {

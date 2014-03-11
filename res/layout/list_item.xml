@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp" >
+    android:paddingBottom="7dp"
+    android:paddingTop="7dp" >
 
     <TextView
         android:id="@+id/timerName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp" />
 
     <TextView
         android:id="@+id/secondsLeft"
@@ -16,17 +17,5 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/timerName"
         android:layout_below="@+id/timerName" />
-
-    <Button
-        android:id="@+id/stopTimerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/secondsLeft"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="13dp"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:text="cancel" />
 
 </RelativeLayout>

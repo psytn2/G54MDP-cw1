@@ -1,8 +1,6 @@
 package com.example.g54mdp_eggtimer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -11,7 +9,6 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,15 +17,21 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -38,9 +41,9 @@ public class MainActivity extends Activity {
 
 	private ArrayList<TimerData> timerDataArr;
 
-	private HashMap<String, TimerData> dataHashMap = new HashMap<String, TimerData>();
+	private MyReceiver myReceiver;
 
-	MyReceiver myReceiver;
+	private Messenger messenger;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class MainActivity extends Activity {
 		setListViewProperties();
 
 		this.bindService(new Intent(this, TimerService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+
 	}
 
 	@Override
@@ -77,8 +81,6 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private Messenger messenger;
-
 	public void startEggTimer(View v) {
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
 		final NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
@@ -92,7 +94,7 @@ public class MainActivity extends Activity {
 		String name = timerNameET.getText().toString();
 		int seconds = (hoursNP.getValue() * 60 * 60) + (minutesNP.getValue() * 60) + secondsNP.getValue();
 
-		if (seconds == 0 || dataHashMap.containsKey(name) || name.equals(""))
+		if (seconds == 0 || findIndex(name) != -1 || name.equals(""))
 			alertWrongInput();
 
 		else {
@@ -119,28 +121,14 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void stopEggTimer(View v) {
-		if (dataHashMap.size() != 0) {
-			Message message = Message.obtain(null, TimerService.STOP_EGGTIMER, 0, 0);
-
-			MyParcelable parcel = new MyParcelable();
-			parcel.eggTimerName = "tai";
-			parcel.seconds = 0;
-
-			Bundle bundle = new Bundle();
-			bundle.putParcelable("stopTimerParcel", (Parcelable) parcel);
-			message.setData(bundle);
-
-			try {
-				Log.d("MainActivity", "StopEggTimer message sent");
-				messenger.send(message);
-			}
-			catch (RemoteException e) {
-				Log.d("MainActivity", "StopEggTimer RemoteException");
-				e.printStackTrace();
+	public int findIndex(String timerName) {
+		int index = -1;
+		for (int i = 0; i < timerDataArr.size(); i++) {
+			if (timerDataArr.get(i).getName().equals(timerName)) {
+				index = i;
 			}
 		}
-
+		return index;
 	}
 
 	public void clearNameEditText(View v) {
@@ -182,16 +170,20 @@ public class MainActivity extends Activity {
 		hoursNP.setMaxValue(23);
 		hoursNP.setMinValue(0);
 		hoursNP.setWrapSelectorWheel(true);
+		hoursNP.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
 		NumberPicker minutesNP = (NumberPicker) findViewById(R.id.minutesNumberPicker);
 		minutesNP.setMaxValue(59);
 		minutesNP.setMinValue(0);
 		minutesNP.setWrapSelectorWheel(true);
+		minutesNP.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
 		NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
 		secondsNP.setMaxValue(59);
 		secondsNP.setMinValue(0);
 		secondsNP.setWrapSelectorWheel(true);
+		secondsNP.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
 		Log.d("MainActivity", "SetNumberPickerBounds MainActivity");
 	}
 
@@ -202,20 +194,72 @@ public class MainActivity extends Activity {
 		listViewTitle.setText("Timers");
 		listView.addHeaderView(listViewTitle);
 		listView.setAdapter(timersAdapter);
+
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long arg3) {
+				final String timerName = ((TextView) view.findViewById(R.id.timerName)).getText().toString();
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				builder.setMessage("Do you want to stop the timer?").setCancelable(false)
+						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								int index = findIndex(timerName);
+								if (index == -1) {
+									dialog.cancel();
+								}
+								else {
+									Message message = Message.obtain(null, TimerService.CANCEL_EGGTIMER, 0, 0);
+
+									MyParcelable parcel = new MyParcelable();
+									parcel.eggTimerName = timerName;
+									parcel.seconds = 0;
+
+									Bundle bundle = new Bundle();
+									bundle.putParcelable("cancelTimer", (Parcelable) parcel);
+									message.setData(bundle);
+
+									try {
+										Log.d("MainActivity", "CancelEggTimer");
+										messenger.send(message);
+									}
+									catch (RemoteException e) {
+										Log.d("MainActivity", "CancelEggTimer RemoteException");
+										e.printStackTrace();
+									}
+
+									timerDataArr.remove(index);
+									timersAdapter.updateData(timerDataArr);
+
+									// Display toast when timer is cancelled
+									Toast toast = Toast.makeText(getApplicationContext(), "Timer: " + timerName
+											+ " was cancelled", Toast.LENGTH_SHORT);
+									toast.setGravity(Gravity.BOTTOM, 0, 0);
+									toast.show();
+								}
+							}
+						}).setNegativeButton("No", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+				AlertDialog alert = builder.create();
+				alert.show();
+				return false;
+			}
+		});
 	}
 
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
-			// TODO Auto-generated method stub
 			Log.d("MainActivity", "onServiceConnected");
 			messenger = new Messenger(service);
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			// TODO Auto-generated method stub
 			Log.d("MainActivity", "onServiceDisconnected");
 			messenger = null;
 

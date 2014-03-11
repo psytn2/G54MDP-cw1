@@ -38,7 +38,7 @@ public class TimersAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		View itemView;
 
 		if (convertView == null) {
@@ -49,10 +49,10 @@ public class TimersAdapter extends BaseAdapter {
 			itemView = convertView;
 		}
 
-		TextView timerName = (TextView) itemView.findViewById(R.id.timerName);
+		final TextView timerName = (TextView) itemView.findViewById(R.id.timerName);
 		TextView secondsLeft = (TextView) itemView.findViewById(R.id.secondsLeft);
 
-		String name = listData.get(position).getName();
+		final String name = listData.get(position).getName();
 		long seconds = listData.get(position).getSeconds();
 		long minutes = seconds / 60;
 		long hours = minutes / 60;

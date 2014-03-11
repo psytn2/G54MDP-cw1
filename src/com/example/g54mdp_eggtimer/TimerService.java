@@ -2,12 +2,15 @@ package com.example.g54mdp_eggtimer;
 
 import java.util.HashMap;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -26,7 +29,7 @@ public class TimerService extends Service {
 
 	public static final int RECEIVE_TIMER_DATA = 1;
 
-	public static final int STOP_EGGTIMER = 2;
+	public static final int CANCEL_EGGTIMER = 2;
 
 	public static final int PAUSE_EGGTIMER = 3;
 
@@ -35,6 +38,8 @@ public class TimerService extends Service {
 	public static final int FINISHED_EGGTIMER = 5;
 
 	public static final String UPDATE_TIMER_INFO = "UPDATE_TIMER_INFO";
+
+	public static final String STOP_TIMER = "STOP_TIMER";
 
 	public static final String TIMER_NAME = "TIMER_NAME";
 
@@ -74,17 +79,10 @@ public class TimerService extends Service {
 				Log.d("TimerService", "MyHandler RECEIVE_TIMER_DATA " + parcel.eggTimerName + " " + parcel.seconds);
 				break;
 
-			case STOP_EGGTIMER:
-
-				parcel = msg.getData().getParcelable("stopTimerParcel");
-				if (timers.get(parcel.eggTimerName) != null) {
-					timers.get(parcel.eggTimerName).cancel();
-					timers.remove(parcel.eggTimerName);
-					Log.d("TimerService", "MyHandler Stop Timer : " + parcel.eggTimerName);
-				}
-				else {
-					Log.d("TimerService", "timer " + parcel.eggTimerName + " does not exist");
-				}
+			case CANCEL_EGGTIMER:
+				parcel = msg.getData().getParcelable("cancelTimer");
+				timers.get(parcel.eggTimerName).cancel();
+				timers.remove(parcel.eggTimerName);
 				break;
 
 			case PAUSE_EGGTIMER:
@@ -102,7 +100,7 @@ public class TimerService extends Service {
 				intent.putExtra(TIMER_NAME, parcel.eggTimerName);
 				intent.putExtra(SECONDS_LEFT, parcel.seconds);
 				sendBroadcast(intent);
-
+				
 				Log.d("TimerService", "MyHandler FINISHED_EGGTIMER ");
 				break;
 			default:

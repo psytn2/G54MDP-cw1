@@ -24,7 +24,7 @@
         android:layout_alignLeft="@+id/timerListView"
         android:layout_below="@+id/timerNameEditText"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:text="Hours"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -45,7 +45,7 @@
         android:layout_below="@+id/hoursNumberPicker"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="3dp"
         android:divider="@color/blue"
         android:dividerHeight="3dp" >
     </ListView>
@@ -57,7 +57,7 @@
         android:layout_alignLeft="@+id/timerListView"
         android:layout_below="@+id/hoursTextView"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="11dp" />
+        android:layout_marginTop="4dp" />
 
     <NumberPicker
         android:id="@+id/minutesNumberPicker"
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/minutesTextView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp" />
+        android:layout_marginTop="4dp" />
 
     <NumberPicker
         android:id="@+id/secondsNumberPicker"
@@ -74,7 +74,7 @@
         android:layout_alignRight="@+id/timerListView"
         android:layout_below="@+id/minutesTextView"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="11dp" />
+        android:layout_marginTop="4dp" />
 
     <EditText
         android:id="@+id/timerNameEditText"
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/timerListView"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:inputType="text"
         android:maxLength="22"
