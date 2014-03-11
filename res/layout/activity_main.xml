@@ -44,7 +44,7 @@
         android:layout_below="@+id/hoursNumberPicker"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:divider="@color/blue"
         android:dividerHeight="3dp" >
     </ListView>

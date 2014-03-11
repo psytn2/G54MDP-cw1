@@ -9,6 +9,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 public class TimerService extends Service {
 
@@ -30,11 +32,15 @@ public class TimerService extends Service {
 
 	public static final int RESUME_EGGTIMER = 4;
 
+	public static final int FINISHED_EGGTIMER = 5;
+
 	public static final String UPDATE_TIMER_INFO = "UPDATE_TIMER_INFO";
 
 	public static final String TIMER_NAME = "TIMER_NAME";
 
 	public static final String SECONDS_LEFT = "SECONDS_LEFT";
+
+	public static final String REMOVE_EGGTIMER = "REMOVE_EGGTIMER";
 
 	private class MyHandler extends Handler {
 		@Override
@@ -47,6 +53,13 @@ public class TimerService extends Service {
 				parcel = msg.getData().getParcelable("startTimeParcel");
 				startEggTimer(parcel.eggTimerName, parcel.seconds);
 				Log.d("TimerService", "MyHandler startEggTimer " + parcel.eggTimerName + " " + parcel.seconds);
+
+				// Display toast when timer starts
+				Toast toast = Toast.makeText(getApplicationContext(), "Timer: " + parcel.eggTimerName + " started",
+						Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.BOTTOM, 0, 0);
+				toast.show();
+
 				break;
 
 			case RECEIVE_TIMER_DATA:
@@ -79,7 +92,19 @@ public class TimerService extends Service {
 
 			case RESUME_EGGTIMER:
 				break;
+			case FINISHED_EGGTIMER:
+				parcel = msg.getData().getParcelable("finishedTimer");
 
+				// remove finished eggtimer from hashmap
+				timers.remove(parcel.eggTimerName);
+				intent = new Intent();
+				intent.setAction(UPDATE_TIMER_INFO);
+				intent.putExtra(TIMER_NAME, parcel.eggTimerName);
+				intent.putExtra(SECONDS_LEFT, parcel.seconds);
+				sendBroadcast(intent);
+
+				Log.d("TimerService", "MyHandler FINISHED_EGGTIMER ");
+				break;
 			default:
 				super.handleMessage(msg);
 			}

@@ -23,12 +23,30 @@ public class EggTimer extends CountDownTimer {
 		this.name = eggTimerName;
 		this.messenger = messenger;
 		this.start();
+
 		Log.d("EggTimer", this.name + " EggTimer started");
 	}
 
 	@Override
 	public void onFinish() {
-		Log.d("EggTimer", this.name + " EggTimer finished");
+		Message message = Message.obtain(null, TimerService.FINISHED_EGGTIMER, 0, 0);
+
+		MyParcelable parcel = new MyParcelable();
+		parcel.eggTimerName = this.name;
+		parcel.seconds = 0;
+
+		Bundle bundle = new Bundle();
+		bundle.putParcelable("finishedTimer", (Parcelable) parcel);
+		message.setData(bundle);
+		try {
+			Log.d("EggTimer", this.name + " EggTimer finished");
+			messenger.send(message);
+		}
+		catch (RemoteException e) {
+			Log.d("EggTimer", "onTick RemoteException");
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override

@@ -19,11 +19,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -43,12 +48,18 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setNumberPickersBounds();
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 		listView = (ListView) findViewById(R.id.timerListView);
 		timerDataArr = new ArrayList<TimerData>();
 		timersAdapter = new TimersAdapter(MainActivity.this, timerDataArr);
 
-		listView.setAdapter(timersAdapter);
+		myReceiver = new MyReceiver(this.timerDataArr, timersAdapter);
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(TimerService.UPDATE_TIMER_INFO);
+		registerReceiver(myReceiver, intentFilter);
+
+		setListViewProperties();
 
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
 
@@ -64,18 +75,9 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	protected void onStart() {
-		myReceiver = new MyReceiver();
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(TimerService.UPDATE_TIMER_INFO);
-		registerReceiver(myReceiver, intentFilter);
-		super.onStart();
-	}
-
-	@Override
-	protected void onStop() {
+	protected void onDestroy() {
 		unregisterReceiver(myReceiver);
-		super.onStop();
+		super.onDestroy();
 	}
 
 	@Override
@@ -89,9 +91,13 @@ public class MainActivity extends Activity {
 
 	public void startEggTimer(View v) {
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
-		NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
-		NumberPicker minutesNP = (NumberPicker) findViewById(R.id.minutesNumberPicker);
-		NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
+		final NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
+		final NumberPicker minutesNP = (NumberPicker) findViewById(R.id.minutesNumberPicker);
+		final NumberPicker secondsNP = (NumberPicker) findViewById(R.id.secondsNumberPicker);
+
+		// Hide keyboard
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(timerNameET.getWindowToken(), 0);
 
 		String name = timerNameET.getText().toString();
 		int seconds = (hoursNP.getValue() * 60 * 60) + (minutesNP.getValue() * 60) + secondsNP.getValue();
@@ -194,6 +200,15 @@ public class MainActivity extends Activity {
 		Log.d("MainActivity", "SetNumberPickerBounds MainActivity");
 	}
 
+	private void setListViewProperties() {
+		TextView listViewTitle = new TextView(getBaseContext());
+		listViewTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+		listViewTitle.setTextColor(getResources().getColor(R.color.black));
+		listViewTitle.setText("Timers");
+		listView.addHeaderView(listViewTitle);
+		listView.setAdapter(timersAdapter);
+	}
+
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 
 		@Override
@@ -213,37 +228,4 @@ public class MainActivity extends Activity {
 
 	};
 
-	private class MyReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-
-			String timerName = intent.getStringExtra("TIMER_NAME");
-			Long timeLeft = intent.getLongExtra("SECONDS_LEFT", 0);
-			TimerData temptd = new TimerData(timerName, timeLeft);
-			int index = findIndex(timerName);
-
-			if (index == -1) {
-				timerDataArr.add(temptd);
-			}
-			else {
-				timerDataArr.get(index).setSeconds(timeLeft);
-			}
-			timersAdapter.updateData(timerDataArr);
-			dataHashMap.put(timerName, temptd);
-
-			Log.d("MainActivity", dataHashMap.size() + " MyReceiver " + timerName + " " + timeLeft);
-		}
-
-		public int findIndex(String timerName) {
-			int index = -1;
-			for (int i = 0; i < timerDataArr.size(); i++) {
-				if (timerDataArr.get(i).getName().equals(timerName)) {
-					index = i;
-				}
-			}
-			return index;
-
-		}
-	}
 }
