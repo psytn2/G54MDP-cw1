@@ -93,10 +93,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="5dp"
         android:ems="10"
+        android:hint="Insert timer name"
         android:inputType="text"
         android:maxLength="22"
         android:onClick="clearNameEditText"
-        android:text="insert name of timer"
         android:textColor="@color/white"
         android:textStyle="bold" />
 
