@@ -11,7 +11,13 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int black=0x7f040001;
         public static final int blue=0x7f040000;
+        public static final int blue2=0x7f040002;
+        public static final int green=0x7f040006;
+        public static final int orange=0x7f040004;
+        public static final int white=0x7f040005;
+        public static final int yellow=0x7f040003;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -27,17 +33,18 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000a;
-        public static final int hoursNumberPicker=0x7f090006;
-        public static final int hoursTextView=0x7f090002;
-        public static final int minutesNumberPicker=0x7f090000;
-        public static final int minutesTextView=0x7f090001;
-        public static final int secondsLeft=0x7f090009;
-        public static final int startTimerButton=0x7f090004;
-        public static final int stopTimerButton=0x7f090003;
-        public static final int timerListView=0x7f090007;
-        public static final int timerName=0x7f090008;
-        public static final int timerNameEditText=0x7f090005;
+        public static final int action_settings=0x7f09000b;
+        public static final int hoursNumberPicker=0x7f090005;
+        public static final int hoursTextView=0x7f090001;
+        public static final int minutesNumberPicker=0x7f090006;
+        public static final int minutesTextView=0x7f090004;
+        public static final int secondsLeft=0x7f09000a;
+        public static final int secondsNumberPicker=0x7f090007;
+        public static final int secondsTextView=0x7f090008;
+        public static final int startTimerButton=0x7f090000;
+        public static final int timerListView=0x7f090002;
+        public static final int timerName=0x7f090009;
+        public static final int timerNameEditText=0x7f090003;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

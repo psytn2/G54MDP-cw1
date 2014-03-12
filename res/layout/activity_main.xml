@@ -2,18 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/yellow"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <NumberPicker
-        android:id="@+id/minutesNumberPicker"
+    <Button
+        android:id="@+id/startTimerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/minutesTextView"
-        android:layout_below="@+id/hoursTextView" />
+        android:layout_above="@+id/hoursTextView"
+        android:layout_alignRight="@+id/timerListView"
+        android:background="@color/green"
+        android:onClick="startEggTimer"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Start Timer" />
+
+    <TextView
+        android:id="@+id/hoursTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/timerListView"
+        android:layout_below="@+id/timerNameEditText"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Hours"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/minutesTextView"
@@ -23,65 +41,74 @@
         android:layout_alignBottom="@+id/hoursTextView"
         android:layout_centerHorizontal="true"
         android:text="Minutes"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/stopTimerButton"
+    <ListView
+        android:id="@+id/timerListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/startTimerButton"
-        android:layout_alignBottom="@+id/startTimerButton"
-        android:layout_alignLeft="@+id/minutesNumberPicker"
-        android:layout_marginLeft="28dp"
-        android:onClick="stopEggTimer"
-        android:text="Stop Timer" />
-
-    <TextView
-        android:id="@+id/hoursTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timerNameEditText"
-        android:layout_marginTop="15dp"
-        android:text="Hours"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_below="@+id/hoursNumberPicker"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/orange"
+        android:divider="@color/white"
+        android:dividerHeight="3dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+    </ListView>
 
     <NumberPicker
         android:id="@+id/hoursNumberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/hoursTextView"
-        android:layout_alignTop="@+id/minutesNumberPicker" />
+        android:layout_alignLeft="@+id/timerListView"
+        android:layout_below="@+id/hoursTextView"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="4dp" />
 
-    <Button
-        android:id="@+id/startTimerButton"
+    <NumberPicker
+        android:id="@+id/minutesNumberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/timerNameEditText"
-        android:layout_below="@+id/hoursNumberPicker"
-        android:layout_marginTop="17dp"
-        android:onClick="startEggTimer"
-        android:text="Start Timer" />
+        android:layout_below="@+id/minutesTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp" />
+
+    <NumberPicker
+        android:id="@+id/secondsNumberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/timerListView"
+        android:layout_below="@+id/minutesTextView"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="4dp" />
 
     <EditText
         android:id="@+id/timerNameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/hoursTextView"
+        android:layout_alignLeft="@+id/timerListView"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:inputType="text"
-        android:text="insert name of timer" >
+        android:maxLength="22"
+        android:onClick="clearNameEditText"
+        android:text="insert name of timer"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
-        <requestFocus />
-    </EditText>
-
-    <ListView
-        android:id="@+id/timerListView"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/secondsTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/startTimerButton"
-        android:divider="@color/blue"
-        android:dividerHeight="4px" >
-    </ListView>
+        android:layout_alignBaseline="@+id/minutesTextView"
+        android:layout_alignBottom="@+id/minutesTextView"
+        android:layout_alignLeft="@+id/secondsNumberPicker"
+        android:text="Seconds"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
 </RelativeLayout>
