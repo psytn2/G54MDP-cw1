@@ -2,12 +2,15 @@ package com.example.g54mdp_eggtimer;
 
 import java.util.HashMap;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.support.v4.app.NotificationCompat.Builder;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -103,6 +106,7 @@ public class TimerService extends Service {
 				intent.putExtra(SECONDS_LEFT, parcel.seconds);
 				sendBroadcast(intent);
 
+				notificateTimerFinished(parcel.eggTimerName);
 				Log.d("TimerService", "MyHandler FINISHED_EGGTIMER ");
 				break;
 			default:
@@ -110,6 +114,28 @@ public class TimerService extends Service {
 			}
 		}
 
+	}
+
+	
+	private NotificationManager notificationManager;
+	/**
+	 * Notificates the user when a timer is finished
+	 * 
+	 * @param eggTimerName name of timer
+	 * @param seconds
+	 */
+	public void notificateTimerFinished(String eggTimerName) {
+		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+		// build notification
+		// the addAction re-use the same intent to keep the example short
+		Notification notification = new Notification.Builder(this).setContentTitle("Alarm finished")
+				.setContentText("Timer: " + eggTimerName).setSmallIcon(R.drawable.ic_stat_name).setAutoCancel(true)
+				.build();
+
+		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+		notificationManager.notify(0, notification);
 	}
 
 	@Override
