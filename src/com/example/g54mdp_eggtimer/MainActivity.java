@@ -20,12 +20,9 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -190,7 +187,7 @@ public class MainActivity extends Activity {
 	private void setListViewProperties() {
 		TextView listViewTitle = new TextView(getBaseContext());
 		listViewTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-		listViewTitle.setTextColor(getResources().getColor(R.color.black));
+		listViewTitle.setTextColor(getResources().getColor(R.color.blue));
 		listViewTitle.setText("Timers");
 		listView.addHeaderView(listViewTitle);
 		listView.setAdapter(timersAdapter);

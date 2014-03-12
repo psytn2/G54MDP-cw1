@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/yellow"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -14,7 +15,10 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/hoursTextView"
         android:layout_alignRight="@+id/timerListView"
+        android:background="@color/green"
         android:onClick="startEggTimer"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="Start Timer" />
 
     <TextView
@@ -26,7 +30,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:text="Hours"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/minutesTextView"
@@ -36,7 +41,8 @@
         android:layout_alignBottom="@+id/hoursTextView"
         android:layout_centerHorizontal="true"
         android:text="Minutes"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/timerListView"
@@ -46,8 +52,11 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="3dp"
-        android:divider="@color/blue"
-        android:dividerHeight="3dp" >
+        android:background="@color/orange"
+        android:divider="@color/white"
+        android:dividerHeight="3dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
     </ListView>
 
     <NumberPicker
@@ -87,7 +96,9 @@
         android:inputType="text"
         android:maxLength="22"
         android:onClick="clearNameEditText"
-        android:text="insert name of timer" />
+        android:text="insert name of timer"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/secondsTextView"
@@ -97,6 +108,7 @@
         android:layout_alignBottom="@+id/minutesTextView"
         android:layout_alignLeft="@+id/secondsNumberPicker"
         android:text="Seconds"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
 </RelativeLayout>
