@@ -112,6 +112,7 @@ public class TimerService extends Service {
 
 	}
 
+	@Override
 	public void onCreate() {
 		messenger = new Messenger(new MyHandler());
 	}

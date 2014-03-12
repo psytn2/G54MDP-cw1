@@ -15,8 +15,8 @@ import android.os.Vibrator;
 import android.util.Log;
 
 /**
- * This class receives the intents sent by the broadcasters in order to process the information and
- * act in consequence, either playing the alarm or removing a finished timer
+ * This class receives the intents sent by the broadcasters in order to process the information and act in consequence,
+ * either playing the alarm or removing a finished timer
  * 
  * @author Tai Nguyen Bui (psytn2)
  */
@@ -60,9 +60,15 @@ public class MyReceiver extends BroadcastReceiver {
 		Log.d("MyReceiver", "onReceive " + timerName + " " + timeLeft);
 	}
 
+	/**
+	 * Ring the alarm if not in mute and turn on the vibrator when the timer finishes
+	 * 
+	 * @param context
+	 * @param timerName name of the timer
+	 */
 	private void ringAlarm(Context context, String timerName) {
 		RingtoneManager ringtoneManager = new RingtoneManager(context);
-		
+
 		// find the alarm to play, if alarm is not available then try notification and ringtone
 		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 		if (alert == null) {
@@ -105,6 +111,12 @@ public class MyReceiver extends BroadcastReceiver {
 		alertDialog.show();
 	}
 
+	/**
+	 * This method finds the index of the given timer in the ArrayList
+	 * 
+	 * @param timerName name of the timer
+	 * @return the index of the timer
+	 */
 	public int findIndex(String timerName) {
 		int index = -1;
 		for (int i = 0; i < timerDataArr.size(); i++) {

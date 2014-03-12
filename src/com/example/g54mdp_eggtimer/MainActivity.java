@@ -86,6 +86,12 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	/**
+	 * method called when the button 'Start Timer' is clicked, it collects the data from the input fields and create a
+	 * parcel in order to be sent to the Service through the messenger
+	 * 
+	 * @param the view of the MainActivity
+	 */
 	public void startEggTimer(View v) {
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
 		final NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
@@ -123,9 +129,15 @@ public class MainActivity extends Activity {
 			}
 			resetInputValues();
 		}
-
+		listView.setSelection(listView.getCount());
 	}
 
+	/**
+	 * This method finds the index of the given timer in the ArrayList
+	 * 
+	 * @param timerName name of the timer
+	 * @return the index of the timer
+	 */
 	public int findIndex(String timerName) {
 		int index = -1;
 		for (int i = 0; i < timerDataArr.size(); i++) {
@@ -136,11 +148,20 @@ public class MainActivity extends Activity {
 		return index;
 	}
 
+	/**
+	 * Clears the input field for the name of the timer
+	 * 
+	 * @param v view of the MainActivity
+	 */
 	public void clearNameEditText(View v) {
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
 		timerNameET.setText("");
 	}
 
+	/**
+	 * Reset to the initial state all the input fields
+	 * 
+	 */
 	private void resetInputValues() {
 		final EditText timerNameET = (EditText) findViewById(R.id.timerNameEditText);
 		final NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
@@ -152,6 +173,10 @@ public class MainActivity extends Activity {
 		secondsNP.setValue(0);
 	}
 
+	/**
+	 * Alert of wrong input in some field
+	 * 
+	 */
 	protected void alertWrongInput() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Wrong input");
@@ -169,6 +194,10 @@ public class MainActivity extends Activity {
 		alertDialog.show();
 	}
 
+	/**
+	 * Setup the numberpickers
+	 * 
+	 */
 	private void setNumberPickersBounds() {
 
 		NumberPicker hoursNP = (NumberPicker) findViewById(R.id.hoursNumberPicker);
@@ -192,6 +221,10 @@ public class MainActivity extends Activity {
 		Log.d("MainActivity", "SetNumberPickerBounds MainActivity");
 	}
 
+	/**
+	 * Setup the properties of the ListView
+	 * 
+	 */
 	private void setListViewProperties() {
 		TextView listViewTitle = new TextView(getBaseContext());
 		listViewTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
