@@ -3,6 +3,11 @@ package com.example.g54mdp_eggtimer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * This class is a personalised Parcelable object that contains information about the timer.
+ * 
+ * @author Tai Nguyen Bui (psytn2)
+ */
 public class MyParcelable implements Parcelable {
 
 	String eggTimerName;

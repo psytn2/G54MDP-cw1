@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.drm.DrmStore.RightsStatus;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -15,6 +14,12 @@ import android.net.Uri;
 import android.os.Vibrator;
 import android.util.Log;
 
+/**
+ * This class receives the intents sent by the broadcasters in order to process the information and
+ * act in consequence, either playing the alarm or removing a finished timer
+ * 
+ * @author Tai Nguyen Bui (psytn2)
+ */
 public class MyReceiver extends BroadcastReceiver {
 	private ArrayList<TimerData> timerDataArr;
 
@@ -57,13 +62,12 @@ public class MyReceiver extends BroadcastReceiver {
 
 	private void ringAlarm(Context context, String timerName) {
 		RingtoneManager ringtoneManager = new RingtoneManager(context);
+		
 		// find the alarm to play, if alarm is not available then try notification and ringtone
 		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 		if (alert == null) {
-			// alert is null, using backup
 			alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			if (alert == null) {
-				// alert backup is null, using 2nd backup
 				alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 			}
 		}

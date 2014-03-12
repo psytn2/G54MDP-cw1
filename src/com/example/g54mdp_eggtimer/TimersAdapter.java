@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * This class is a customised BaseAdapter that updates the listView of the application
+ * 
+ * @author Tai Nguyen Bui (psytn2)
+ */
 public class TimersAdapter extends BaseAdapter {
 
 	private Context mContext;

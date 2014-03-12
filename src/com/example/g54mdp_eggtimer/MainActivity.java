@@ -30,6 +30,12 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * This class is the MainActivity of the application. It takes in charge of collecting the inputs from the user and
+ * sending messages to the Service. It also displays the information of the timers through a listView
+ * 
+ * @author Tai Nguyen Bui (psytn2)
+ */
 public class MainActivity extends Activity {
 
 	private ListView listView;
@@ -68,6 +74,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		unregisterReceiver(myReceiver);
+		timerDataArr.clear();
+		timerDataArr = null;
 		super.onDestroy();
 	}
 

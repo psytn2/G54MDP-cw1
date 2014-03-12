@@ -1,5 +1,10 @@
 package com.example.g54mdp_eggtimer;
 
+/**
+ * This class was created to gather information about a Timer in order to facilitate the transaction of data
+ * 
+ * @author Tai Nguyen Bui (psytn2)
+ */
 public class TimerData {
 	String name;
 

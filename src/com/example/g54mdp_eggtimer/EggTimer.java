@@ -8,6 +8,12 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.util.Log;
 
+/**
+ * This class acts as the timer of the Application, it extends the CountDownTimer, allowing multiple timers running on
+ * the background at the same time
+ * 
+ * @author Tai Nguyen Bui (psytn2)
+ */
 public class EggTimer extends CountDownTimer {
 
 	private static final int SECOND_IN_MILLIS = 1000;

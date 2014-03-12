@@ -2,19 +2,21 @@ package com.example.g54mdp_eggtimer;
 
 import java.util.HashMap;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
+/**
+ * This class is in charge of receiving and organising the information.
+ * 
+ * @author Tai Nguyen Bui (psytn2)
+ */
 public class TimerService extends Service {
 
 	private Messenger messenger;
@@ -100,7 +102,7 @@ public class TimerService extends Service {
 				intent.putExtra(TIMER_NAME, parcel.eggTimerName);
 				intent.putExtra(SECONDS_LEFT, parcel.seconds);
 				sendBroadcast(intent);
-				
+
 				Log.d("TimerService", "MyHandler FINISHED_EGGTIMER ");
 				break;
 			default:
@@ -127,6 +129,8 @@ public class TimerService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.d("TimerService", "onDestroy");
+		timers.clear();
+		timers = null;
 		super.onDestroy();
 	}
 
